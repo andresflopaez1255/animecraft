@@ -1,0 +1,14 @@
+<div class="mb-5 mt-2 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+        <div class="w-2.5 h-2.5 bg-[#8ee36b]"></div>
+        <h1 class="text-[22px] font-bold text-white tracking-wide">
+            {{title()}}
+        </h1>
+    </div>
+    @if (showViewAll()) {
+        <a href="#" class="text-xs font-medium text-[#c7a979] hover:text-white transition flex items-center gap-1">
+            Ver todo 
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+        </a>
+    }
+</div>

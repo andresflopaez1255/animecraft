@@ -1,0 +1,75 @@
+<div
+  class="rounded-2xl bg-[#16171b] border border-[#23252d] p-2.5 sm:p-3 flex flex-col gap-2 transition-all duration-300 hover:border-emerald-500/40 hover:bg-[#1a1c22] hover:-translate-y-1 hover:shadow-xl hover:shadow-black/70 group cursor-pointer"
+>
+  <!-- Contenedor de la Imagen / Thumbnail -->
+  <div class="relative aspect-[16/10] sm:aspect-video w-full rounded-xl overflow-hidden bg-neutral-900">
+    <img
+      [src]="episode().imageUrl"
+      [alt]="episode().title"
+      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      loading="eager"
+    />
+
+    <!-- Badge de Tiempo (Hace 20 min / Hace 1 hora, etc.) -->
+    <div
+      class="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-[11px] font-semibold tracking-wide"
+      [class.text-[#86efac]]="episode().timeColor === 'green'"
+      [class.text-neutral-200]="episode().timeColor !== 'green'"
+    >
+      {{ episode().timeAgo }}
+    </div>
+
+ 
+
+    <!-- Overlay de Reproducción al hacer hover -->
+    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+      <div class="w-10 h-10 rounded-full bg-emerald-500/90 text-white flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
+        <svg class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
+          <polygon points="5 3 19 12 5 21 5 3" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-1 px-1 pt-0.5">
+   
+    <span class="text-xs sm:text-[13px] font-semibold text-[#d4a359] tracking-wide">
+      {{ episode().episodeInfo }}
+    </span>
+
+   
+    <h4 class="text-sm sm:text-base font-bold text-white tracking-tight truncate group-hover:text-emerald-400 transition-colors">
+      {{ episode().title }}
+    </h4>
+
+  
+    <div class="flex items-center justify-between text-xs text-neutral-400 pt-1.5 mt-0.5 border-t border-neutral-800/40">
+      <span class="font-medium text-neutral-300">
+        {{ episode().audioSubText }}
+      </span>
+
+      <!-- Icono de subtítulo o audio dual -->
+      @if (episode().type === 'sub') {
+        <span class="px-1.5 py-0.5 rounded-[4px] border border-neutral-600/80 text-[10px] font-bold text-neutral-300 tracking-wider">
+          CC
+        </span>
+      } @else {
+        <!-- Icono Audio Dual (Usuario con ondas sonoras en verde) -->
+        <svg
+          class="w-4 h-4 text-[#4ade80]"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M19 8a5 5 0 0 1 0 8" />
+          <path d="M22 5a9 9 0 0 1 0 14" />
+        </svg>
+      }
+    </div>
+  </div>
+</div>

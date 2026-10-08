@@ -1,0 +1,37 @@
+<article class="group w-[150px] sm:w-[170px] shrink-0 flex flex-col gap-2 relative">
+    
+    <!-- Poster Image Container -->
+    <div class="relative w-full aspect-[2/3] rounded-xl overflow-hidden border border-white/5 shadow-md">
+        <img [src]="anime.image" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" [alt]="anime.title" />
+        
+        <!-- Top Left Badge -->
+        <div class="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-bold tracking-wide border border-white/10" 
+             [class]="anime.badgeType === 'HD' ? 'bg-[#8ee36b] text-[#14200f]' : anime.badgeType === 'DOBLAJE' ? 'bg-[#214c1e] text-[#8ee36b]' : 'bg-[#1c1f1e]/90 text-white backdrop-blur-sm'">
+            {{ anime.badge }}
+        </div>
+        
+        <!-- Subtle Bottom Gradient to make images pop -->
+        <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
+    </div>
+    
+    <!-- Info Section below poster -->
+    <div class="flex items-start gap-2 px-1">
+        
+        <!-- Large Golden Number -->
+        <span class="text-[52px] leading-[0.75] font-black text-[#d8c99b] drop-shadow-md tracking-tighter shrink-0 pt-2">
+            {{ index + 1 }}
+        </span>
+        
+        <!-- Title and Rating -->
+        <div class="flex flex-col min-w-0 pt-2">
+            <h5 class="text-white text-[13px] font-bold truncate tracking-tight">
+                {{ anime.title }}
+            </h5>
+            <span class="text-[#a0a5a3] text-[11px] font-medium mt-0.5 flex items-center gap-1">
+                <span class="text-[#d8c99b]">★</span> {{ anime.rating }} • {{ anime.genre }}
+            </span>
+        </div>
+        
+    </div>
+
+</article>

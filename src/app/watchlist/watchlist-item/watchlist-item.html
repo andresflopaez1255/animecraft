@@ -1,0 +1,45 @@
+<div class="bg-[#151817] w-[280px] sm:w-[320px] rounded-xl flex flex-col shrink-0 overflow-hidden cursor-pointer group transition-transform hover:scale-[1.02]">
+    
+    <!-- Image Container -->
+    <div class="relative w-full aspect-video">
+        <img
+            [src]="watchlistItem.image"
+            [alt]="watchlistItem.title"
+            class="w-full h-45 object-cover"
+        >
+        
+        <!-- Play Button Overlay -->
+        <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+            <div class="w-12 h-12 rounded-full bg-[#8ee36b]/90 flex items-center justify-center backdrop-blur-sm shadow-lg shadow-black/50 transform scale-90 group-hover:scale-100 transition-transform">
+                <svg class="w-5 h-5 text-[#14200f] ml-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M6.3 4.5a1 1 0 0 1 1.5-.86l7.5 5a1 1 0 0 1 0 1.72l-7.5 5A1 1 0 0 1 6.3 14.5v-10Z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Episode Badge Top Right -->
+        <div class="absolute top-2 right-2 bg-black/80 px-2 py-0.5 rounded text-[10px] font-bold text-white tracking-wide border border-white/10 shadow-sm shadow-black/50">
+            Ep. {{ watchlistItem.episode }} • T1
+        </div>
+
+        <!-- Progress Bar at bottom of image -->
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-[#403329]/80">
+            <div class="h-full bg-[#8ee36b]" [style.width.%]="watchlistItem.progress"></div>
+        </div>
+    </div>
+
+    <!-- Details Section -->
+    <div class="p-4 flex flex-col gap-1.5">
+        <div class="flex justify-between items-start gap-2">
+            <h5 class="text-white text-sm font-bold tracking-tight line-clamp-1">
+                {{ watchlistItem.title }}
+            </h5>
+            <span class="shrink-0 text-[10px] font-medium text-[#a0a5a3] bg-[#1c1f1e] px-1.5 py-0.5 rounded border border-white/5">
+                {{ watchlistItem.minutesRemaining }}m rest.
+            </span>
+        </div>
+        <p class="text-[12px] text-[#858b88] w-full truncate">
+            Ep. {{ watchlistItem.episode }}: {{ watchlistItem.episodeTitle }}
+        </p>
+    </div>
+</div>

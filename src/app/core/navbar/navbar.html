@@ -1,0 +1,49 @@
+<nav class="navbar fixed top-0 start-0 z-20 w-full border-b border-white/5 bg-[#060608]/95 backdrop-blur-md"
+    aria-label="Principal">
+    <div class="mx-auto flex max-w-[1400px] flex-wrap items-center gap-4 px-4 py-3 sm:px-6 lg:gap-10 lg:py-4">
+        <a routerLink="/" class="logo-link group flex shrink-0 items-center gap-3 no-underline">
+            <span class="logo-icon relative flex h-11 w-11 items-center justify-center" aria-hidden="true">
+                <span class="logo-glow absolute inset-0 rounded-lg"></span>
+                <svg class="relative z-10 h-10 w-10" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 12L20 6L32 12V28L20 34L8 28V12Z" fill="#3d7a2e" />
+                    <path d="M8 12L20 18L32 12L20 6L8 12Z" fill="#6ecf4a" />
+                    <path d="M20 18V34L8 28V12L20 18Z" fill="#5cb848" />
+                    <path d="M20 18L32 12V28L20 34V18Z" fill="#4a9638" />
+                    <path d="M20 18L32 12L20 6L8 12L20 18Z" fill="#7ee05a" opacity="0.35" />
+                </svg>
+            </span>
+            <span class="flex flex-col leading-tight">
+                <span class="font-extrabold tracking-wide text-white">
+                    ANIME<span class="text-[#9ef01a]">CRAFT</span>
+                </span>
+
+            </span>
+        </a>
+
+        <ul class="hidden items-center gap-8 text-[15px] font-medium text-white/90 md:flex">
+            @for (link of navLinks; track link.label) {
+            <li>
+                <a [href]="link.href" class="nav-link rounded-md px-1 py-0.5 transition-colors hover:text-white">
+                    {{ link.label }}
+                </a>
+            </li>
+            }
+        </ul>
+
+        <div class="ms-auto w-full min-w-0 md:max-w-md lg:max-w-lg xl:max-w-xl">
+            <label for="navbar-search" class="sr-only">Buscar anime o estudio</label>
+            <div class="search-field relative">
+                <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-4 text-white/40">
+                    <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                            d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+                    </svg>
+                </span>
+                <input id="navbar-search" type="search" name="q" autocomplete="off"
+                    placeholder="Buscar anime, estudio..."
+                    class="search-input w-full rounded-full border border-white/5 bg-[#141418] py-2.5 ps-11 pe-4 text-sm text-white placeholder:text-white/35 focus:border-[#9ef01a]/40 focus:outline-none focus:ring-2 focus:ring-[#9ef01a]/20" />
+            </div>
+        </div>
+    </div>
+</nav>

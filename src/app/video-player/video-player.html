@@ -1,0 +1,90 @@
+<div class="w-full max-w-5xl mx-auto flex flex-col gap-4 text-white">
+
+  <!-- Barra de control: Selección de Anime y Episodio -->
+  <div class="flex flex-wrap items-center justify-between gap-3 p-4 bg-neutral-900/90 rounded-2xl border border-neutral-800 backdrop-blur-sm shadow-xl">
+    <div class="flex flex-wrap items-center gap-3">
+   
+    <!--   <!-- Selector de Episodio -->
+     <!--  <div class="flex items-center gap-1.5 bg-neutral-800/80 px-2 py-1 rounded-lg border border-neutral-700">
+        <span class="text-xs text-neutral-400 font-semibold uppercase">Ep:</span>
+        <button
+          type="button"
+          (click)="changeEpisode(-1)"
+          class="w-6 h-6 flex items-center justify-center rounded bg-neutral-700 hover:bg-neutral-600 text-xs font-bold transition-colors cursor-pointer"
+          title="Episodio anterior">
+          -
+        </button>
+        <span class="px-2 font-mono text-sm font-bold text-rose-400">{{ episodeNumber() }}</span>
+        <button
+          type="button"
+          (click)="changeEpisode(1)"
+          class="w-6 h-6 flex items-center justify-center rounded bg-neutral-700 hover:bg-neutral-600 text-xs font-bold transition-colors cursor-pointer"
+          title="Episodio siguiente">
+          +
+        </button>
+      </div> -->
+
+
+  <!-- Mensaje de error si ocurre alguno -->
+  @if (errorMessage()) {
+    <div class="p-3 bg-rose-950/50 border border-rose-800 text-rose-300 rounded-xl text-xs flex items-center justify-between">
+      <span>⚠️ {{ errorMessage() }}</span>
+      <button (click)="fetchServers()" class="underline hover:text-white font-semibold">Reintentar</button>
+    </div>
+  }
+
+  <!-- Contenedor del reproductor de video (Aspect ratio 16:9) -->
+  <div class="relative w-full aspect-video bg-black overflow-hidden rounded-2xl shadow-2xl border border-neutral-800">
+    @if (streamUrl()) {
+      <media-player
+        [src]="streamUrl()"
+        title="{{ animeTitle() }} - Episodio {{ episodeNumber() }}"
+        playsinline
+        crossorigin="anonymous"
+        [tracks]="textTracks()"
+        class="h-full w-full"
+        (provider-change)="onProviderChange($event)"
+        (can-play)="onCanPlay($event)"
+        (error)="onPlayerError($event)">
+        <media-provider>
+          @if (subtitleUrl()) {
+            <track
+              [src]="subtitleUrl()"
+              kind="subtitles"
+              label="Español (Latino)"
+              srclang="es"
+              type="vtt"
+              default
+            />
+          }
+        </media-provider>
+        <media-video-layout></media-video-layout>
+      </media-player>
+    } @else {
+      <div class="w-full h-full flex flex-col items-center justify-center gap-3 text-neutral-400">
+        <span class="text-3xl">⏳</span>
+        <span class="text-sm">Cargando servidores más livianos...</span>
+      </div>
+    }
+  </div>
+
+ 
+      <div class="flex flex-wrap items-center gap-3">
+        @for (server of servers(); track server.index) {
+          <button
+            type="button"
+            (click)="selectServer(server.index)"
+            [class]="server.index === selectedServerIndex()
+              ? 'flex items-center gap-2.5 px-4 py-2.5 rounded-xl border bg-rose-600 text-white border-rose-500 shadow-lg shadow-rose-950 transition-all cursor-pointer'
+              : 'flex items-center gap-2.5 px-4 py-2.5 rounded-xl border bg-neutral-800/80 hover:bg-neutral-800 text-neutral-300 border-neutral-700 transition-all cursor-pointer'">
+            <span class="font-bold text-sm">{{ server.name }}</span>
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-black/30 border border-white/10 font-medium">
+              {{ server.sizeFormatted }}
+            </span>
+          </button>
+        }
+      </div>
+
+    
+  
+</div>

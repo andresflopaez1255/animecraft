@@ -1,0 +1,14 @@
+
+<app-section-title title="Continuar viendo" [showViewAll]="true"/>
+
+<div
+  class="flex gap-6 overflow-x-auto scrollbar-hide touch-pan-x"
+  (wheel)="onWatchlistWheel($event)"
+>
+  @for (item of watchlist; track item.id) {
+    <app-watchlist-item
+      [watchlistItem]="item"
+      class="shrink-0"
+    />
+  }
+</div>

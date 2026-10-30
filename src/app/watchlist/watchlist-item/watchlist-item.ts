@@ -1,21 +1,13 @@
 import { Component, Input } from '@angular/core';
-import { IWatchlistItem, WATCHLIST_MOCK } from '../watchlist';
-
-
+import { IWatchlistItem } from '../watchlist';
 
 @Component({
-  imports: [
-
-  ],
   selector: 'app-watchlist-item',
-  styleUrl: './watchlist-item.css',
+  standalone: true,
+  imports: [],
   templateUrl: './watchlist-item.html',
+  styleUrl: './watchlist-item.css',
 })
-
 export default class WatchlistItem {
-  @Input() watchlistItem: IWatchlistItem = WATCHLIST_MOCK[0];
-
-  constructor() {
-    this.watchlistItem = WATCHLIST_MOCK[0] as IWatchlistItem;
-  }
+  @Input({ required: true }) watchlistItem!: IWatchlistItem;
 }

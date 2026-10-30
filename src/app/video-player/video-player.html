@@ -3,9 +3,21 @@
   <!-- Barra de control: Selección de Anime y Episodio -->
   <div class="flex flex-wrap items-center justify-between gap-3 p-4 bg-neutral-900/90 rounded-2xl border border-neutral-800 backdrop-blur-sm shadow-xl">
     <div class="flex flex-wrap items-center gap-3">
-   
-    <!--   <!-- Selector de Episodio -->
-     <!--  <div class="flex items-center gap-1.5 bg-neutral-800/80 px-2 py-1 rounded-lg border border-neutral-700">
+      <!-- Input de Anime -->
+      <div class="flex items-center gap-2">
+        <label class="text-xs text-neutral-400 font-semibold uppercase">Anime:</label>
+        <input
+          type="text"
+          [ngModel]="animeTitle()"
+          (ngModelChange)="animeTitle.set($event)"
+          (keydown.enter)="fetchServers()"
+          placeholder="Nombre del anime..."
+          class="px-3 py-1.5 text-xs rounded-lg bg-neutral-800 text-white border border-neutral-700 focus:outline-none focus:border-rose-500 w-44 sm:w-60"
+        />
+      </div>
+
+      <!-- Selector de Episodio -->
+      <div class="flex items-center gap-1.5 bg-neutral-800/80 px-2 py-1 rounded-lg border border-neutral-700">
         <span class="text-xs text-neutral-400 font-semibold uppercase">Ep:</span>
         <button
           type="button"
@@ -22,8 +34,30 @@
           title="Episodio siguiente">
           +
         </button>
-      </div> -->
+      </div>
 
+      <button
+        type="button"
+        (click)="fetchServers()"
+        [disabled]="isLoading()"
+        class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-600 hover:bg-rose-500 text-white transition-colors cursor-pointer flex items-center gap-1.5 disabled:opacity-50">
+        @if (isLoading()) {
+          <span class="animate-spin text-xs">⏳</span>
+          <span>Buscando...</span>
+        } @else {
+          <span>🔍 Buscar</span>
+        }
+      </button>
+    </div>
+
+    <!-- Indicador de Debrid Premium -->
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-amber-950/80 text-amber-300 border-amber-700">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        ⚡ Real-Debrid CDN Activo
+      </span>
+    </div>
+  </div>
 
   <!-- Mensaje de error si ocurre alguno -->
   @if (errorMessage()) {
@@ -68,7 +102,16 @@
     }
   </div>
 
- 
+  <!-- Selección de Servidores (Solo los 3 más livianos: Server 1, Server 2, Server 3) -->
+  @if (servers().length > 0) {
+    <div class="p-4 bg-neutral-900/90 rounded-2xl border border-neutral-800 flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-wider text-neutral-400">
+          Servidores Disponibles (Optimizados y Livianos):
+        </span>
+        <span class="text-[11px] text-neutral-500 font-mono">1080p &le; 500MB</span>
+      </div>
+
       <div class="flex flex-wrap items-center gap-3">
         @for (server of servers(); track server.index) {
           <button
@@ -85,6 +128,17 @@
         }
       </div>
 
-    
-  
+      <!-- Info del servidor actual -->
+      @if (currentTorrent()) {
+        <div class="mt-1 pt-2 border-t border-neutral-800/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-400">
+          <span class="truncate max-w-md">
+            Archivo: <strong class="text-neutral-200 font-mono">{{ currentTorrent()?.title }}</strong>
+          </span>
+          <span class="px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800 font-mono text-[11px] flex items-center gap-1.5 font-semibold">
+            🇯🇵 Audio Japonés + 💬 Subtítulos en Español (Latino)
+          </span>
+        </div>
+      }
+    </div>
+  }
 </div>

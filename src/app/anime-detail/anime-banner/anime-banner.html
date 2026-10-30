@@ -1,0 +1,90 @@
+<section class="relative w-full min-h-[550px] sm:min-h-[620px] lg:min-h-[680px] overflow-hidden bg-[#0e1011] flex flex-col justify-end">
+  <!-- Full-width Background Image -->
+  <img
+    [src]="item()?.bannerImage || item()?.coverImage?.extraLarge || item()?.coverImage?.large"
+    [alt]="item()?.title?.romaji || item()?.title?.userPreferred || 'Anime banner'"
+    class="absolute inset-0 w-full h-full object-cover object-top sm:object-center select-none"
+  />
+
+  <!-- Dark Gradients to ensure text readability matching reference -->
+  <div class="absolute inset-0 bg-gradient-to-t from-[#0e1011] via-[#0e1011]/85 via-45% to-transparent"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-[#0e1011]/90 via-[#0e1011]/50 to-transparent"></div>
+
+  <!-- Banner Content anchored at bottom -->
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 pb-8 sm:pb-12 flex flex-col gap-3.5">
+
+    <!-- Badges Row -->
+    <div class="flex flex-wrap items-center gap-2">
+      <!-- Rating (★ 4.9) -->
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-bold text-white border border-white/10 shadow-sm">
+        <span class="text-[#facc15]">★</span>
+        {{ item()?.averageScore ? (item()!.averageScore! / 10).toFixed(1) : '4.9' }}
+      </span>
+
+      <!-- Age Rating (16+) -->
+      <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-bold text-white border border-white/10 shadow-sm">
+        16+
+      </span>
+
+      <!-- Resolution (4K UHD) -->
+      <span class="px-2.5 py-1 rounded-md bg-[#183820] border border-[#22c55e]/30 text-[#4ade80] text-xs font-extrabold tracking-wide uppercase shadow-sm">
+        4K UHD
+      </span>
+
+      <!-- Episodes (24 EPS) -->
+      <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-xs font-bold text-white/90 border border-white/10 shadow-sm">
+        {{ item()?.episodes ? item()?.episodes + ' EPS' : '24 EPS' }}
+      </span>
+    </div>
+
+    <!-- Season / Status Subtitle (Golden text) -->
+    <p class="text-[#e2b774] text-xs sm:text-sm font-bold tracking-wider uppercase">
+      @if (item()?.status === 'RELEASING') {
+        {{ item()?.seasonYear ? 'TEMPORADA ' + (item()?.seasonYear ? '2' : '1') + ' • ' : '' }}EN EMISIÓN
+      } @else if (item()?.status === 'FINISHED') {
+        FINALIZADO
+      } @else {
+        PRÓXIMAMENTE
+      }
+    </p>
+
+    <!-- Main Title -->
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.1] max-w-3xl drop-shadow-lg">
+      {{ item()?.title?.romaji || item()?.title?.userPreferred }}
+    </h1>
+
+    <!-- Genres Pills -->
+    <div class="flex flex-wrap items-center gap-2 pt-1">
+      @for (genre of item()?.genres; track genre) {
+        <span class="px-4 py-1.5 rounded-full bg-[#181a1e]/90 backdrop-blur-sm border border-white/10 text-xs font-medium text-neutral-200 shadow-sm">
+          {{ genre }}
+        </span>
+      }
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-wrap items-center gap-3 pt-3">
+      <a
+        [routerLink]="['/watch']"
+        [queryParams]="{ title: item()?.title?.romaji || item()?.title?.userPreferred, episode: 1 }"
+        class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold px-7 py-3 text-sm transition-all shadow-lg shadow-emerald-950/40 hover:scale-105 active:scale-95"
+      >
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+          <polygon points="5 3 19 12 5 21 5 3" />
+        </svg>
+        Ver ahora
+      </a>
+
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 rounded-xl bg-[#1c1f1e] hover:bg-[#252a29] border border-white/10 text-white font-semibold px-6 py-3 text-sm transition-all hover:scale-105 active:scale-95"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 5.5A2.5 2.5 0 0 1 7.5 3h9A2.5 2.5 0 0 1 19 5.5V21l-7-4-7 4V5.5Z" />
+        </svg>
+        Mi lista
+      </button>
+    </div>
+
+  </div>
+</section>

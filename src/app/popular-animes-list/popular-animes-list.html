@@ -1,30 +1,17 @@
 <section class="mb-6">
-
-  <!-- Section Title -->
-  <div class="mb-5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-          <svg class="w-6 h-6 text-[#8ee36b]" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2c0 0-4.5 3.5-5 9.5a5 5 0 0 0 9.5 2.5c0-3-2-5-2-5s1.5 2 1.5 4.5A4.5 4.5 0 0 1 12 22a7.5 7.5 0 0 1-7.5-7.5C4.5 9 12 2 12 2z"/>
-          </svg>
-          <h1 class="text-[22px] font-bold text-white tracking-wide">
-              Anime Populares
-          </h1>
-      </div>
-      <span class="text-[10px] font-bold text-[#c7a979] bg-[#1c1f1e] px-3 py-1.5 rounded border border-white/5 uppercase tracking-widest">
-          Esta semana
-      </span>
-  </div>
+  <app-section-title title="Anime Populares" subtitle="Esta semana" />
 
   <div
     class="flex gap-4 overflow-x-auto scrollbar-hide touch-pan-x"
     (wheel)="onWatchlistWheel($event)"
   >
-    @for (anime of animes; track anime.title; let i = $index) {
+    @for (anime of animesList(); track anime.id; let i = $index) {
+      <a [routerLink]="['/anime', anime.id]">
         <app-popular-animes-item
-            [anime]="anime"
-            [index]="i"
+          [anime]="anime"
+          [index]="i"
         />
+      </a>
     }
   </div>
-
 </section>

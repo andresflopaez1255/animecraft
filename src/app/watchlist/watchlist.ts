@@ -22,7 +22,7 @@ export const WATCHLIST_MOCK: IWatchlistItem[] = [
     minutesRemaining: 18,
     progress: 75,
     image:
-      "https://cdn.myanimelist.net/images/anime/1015/138006l.jpg",
+      "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=800",
   },
   {
     id: 2,
@@ -33,7 +33,7 @@ export const WATCHLIST_MOCK: IWatchlistItem[] = [
     minutesRemaining: 5,
     progress: 90,
     image:
-      "https://cdn.myanimelist.net/images/anime/1015/138006l.jpg",
+      "https://images.unsplash.com/photo-1542382156909-9240890bf227?q=80&w=800",
   },
   {
     id: 3,
@@ -154,3 +154,4 @@ export default class Watchlist {
     container.scrollLeft += event.deltaY;
   }
 }
+

@@ -3,11 +3,11 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": "32c7a0a3-0c3d-4ec8-a76b-f10c2edce034"
+    "analytics": false
   },
   "newProjectRoot": "projects",
   "projects": {
-    "Animecraft": {
+    "animecraft": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -26,9 +26,6 @@
               }
             ],
             "styles": [
-              "node_modules/vidstack/player/styles/base.css",
-              "node_modules/vidstack/player/styles/default/theme.css",
-              "node_modules/vidstack/player/styles/default/layouts/video.css",
               "src/styles.css"
             ]
           },
@@ -37,13 +34,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2MB",
-                  "maximumError": "3MB"
+                  "maximumWarning": "3MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "10kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"
@@ -51,30 +48,19 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
-                }
-              ]
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular/build:dev-server",
-          "options": {
-            "host": "0.0.0.0",
-            "port": 4200,
-            "allowedHosts": [".trycloudflare.com"]
-          },
           "configurations": {
             "production": {
-              "buildTarget": "Animecraft:build:production"
+              "buildTarget": "animecraft:build:production"
             },
             "development": {
-              "buildTarget": "Animecraft:build:development"
+              "buildTarget": "animecraft:build:development"
             }
           },
           "defaultConfiguration": "development"

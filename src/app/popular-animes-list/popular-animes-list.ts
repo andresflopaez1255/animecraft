@@ -1,51 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { SectionTitle } from '../core/section-title/section-title';
 import { PopularAnimesItem } from './popular-animes-item/popular-animes-item';
+import { AnimePopularService } from './anime-popular.service';
+import { PopularAnime } from '../core/interfaces/popular-anime';
 
 @Component({
-  imports: [
-    SectionTitle,
-    PopularAnimesItem
-  ],
+  imports: [SectionTitle, PopularAnimesItem, RouterLink],
   selector: 'app-popular-animes-list',
   templateUrl: './popular-animes-list.html',
 })
-export class PopularAnimesList {
-  
-  animes = [
-    {
-      title: 'The Emerald Sovereign',
-      image: 'https://images.unsplash.com/photo-1590608882583-b7159d2909cc?q=80&w=800',
-      rating: 4.95,
-      genre: 'Fantasia',
-      badge: 'HD',
-      badgeType: 'HD'
-    },
-    {
-      title: 'Deep Dark Requiem',
-      image: 'https://images.unsplash.com/photo-1542466500-dccb2789cbbb?q=80&w=800',
-      rating: 4.88,
-      genre: 'Terror',
-      badge: 'SUB',
-      badgeType: 'SUB'
-    },
-    {
-      title: 'Redstone Chronicles',
-      image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=800',
-      rating: 4.81,
-      genre: 'Acción',
-      badge: 'DOBLAJE',
-      badgeType: 'DOBLAJE'
-    },
-    {
-      title: 'Diamond Heart',
-      image: 'https://images.unsplash.com/photo-1616089332560-6b3a0ed3fdf4?q=80&w=800',
-      rating: 4.75,
-      genre: 'Aventura',
-      badge: 'HD',
-      badgeType: 'HD'
-    }
-  ];
+export class PopularAnimesList implements OnInit {
+  private readonly popularService = inject(AnimePopularService);
+
+  readonly animesList = signal<PopularAnime[]>([]);
+
+  ngOnInit(): void {
+    this.getPopularAnimes();
+  }
+
+  getPopularAnimes(): void {
+    this.popularService.getPopularList().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.animesList.set(response.data);
+        }
+      },
+      error: (err) => console.error('Error al cargar populares:', err),
+    });
+  }
 
   onWatchlistWheel(event: WheelEvent): void {
     const container = event.currentTarget as HTMLElement;

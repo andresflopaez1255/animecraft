@@ -39,12 +39,6 @@ export interface Title {
 }
 
 
-export interface BannerItem {
-    title: string;
-    bannerImage: string;
-    description: string;
-    format: string;
-    episodeCount: number;
-    averageScore: number
-    genres: string[];
+export interface BannerItem extends PopularAnime {
+    episodeCount?: number;
 }

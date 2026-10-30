@@ -1,85 +1,73 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, computed, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { HeroBannerService } from './hero-banner.service';
-import { BannerItem } from '../core/interfaces/popular-anime';
+import { PopularAnime } from '../core/interfaces/popular-anime';
 
 @Component({
   selector: 'app-hero-banner',
   standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './hero-banner.html',
+  styleUrl: './hero-banner.css',
 })
-export class HeroBanner implements OnInit {
-  ngOnInit(): void {
-    this.getItemBanner()
+export class HeroBanner implements OnInit, OnDestroy {
+  readonly animes = signal<PopularAnime[]>([]);
+  readonly currentIndex = signal(0);
+  readonly currentAnime = computed(() => this.animes()[this.currentIndex()]);
+  private intervalId: ReturnType<typeof setInterval> | null = null;
+
+  private readonly service = inject(HeroBannerService);  
+
+  ngOnInit() {
+    this.service.getRandomPopular().subscribe({
+      next: (data) => {
+        this.animes.set(data);
+
+        console.log('Datos del hero banner cargados:', data);
+        this.startCarousel();
+      },
+      error: (err) => console.error('Error al cargar datos del hero banner:', err),
+    });
   }
 
-  heroBannerService = inject(HeroBannerService)
-  bannerItems = signal<BannerItem[]>([])
-  bannerCurrentIndex = signal<number>(0)
-  private touchStartX = 0;
-  private minSwipeDistance = 50; // Distancia mínima en píxeles para que cuente como deslizamiento
-  // --- EVENTOS PARA CELULAR (Táctil) ---
-  onTouchStart(event: TouchEvent) {
-    this.touchStartX = event.changedTouches[0].screenX;
+  ngOnDestroy() {
+    this.stopCarousel();
   }
-  onTouchEnd(event: TouchEvent) {
-    const touchEndX = event.changedTouches[0].screenX;
-    this.handleSwipeDirection(touchEndX);
-  }
-  // --- EVENTOS PARA PC (Mouse) ---
-  onMouseDown(event: MouseEvent) {
-    this.touchStartX = event.screenX;
-  }
-  onMouseUp(event: MouseEvent) {
-    const touchEndX = event.screenX;
-    this.handleSwipeDirection(touchEndX);
-  }
-  // --- LÓGICA PRINCIPAL DEL SWIPE ---
-  handleSwipeDirection(touchEndX: number) {
-    const difference = this.touchStartX - touchEndX;
-    // Comprobamos que el arrastre fue mayor a 50px (evita clics accidentales)
-    if (Math.abs(difference) > this.minSwipeDistance) {
-      if (difference > 0) {
-        // Deslizó hacia la izquierda <-
-        this.nextPage();
-      } else {
-        // Deslizó hacia la derecha ->
-        this.beforePage();
-      }
+
+  startCarousel() {
+    this.stopCarousel();
+    if (this.animes().length > 1) {
+      this.intervalId = setInterval(() => {
+        this.next();
+      }, 6000);
     }
   }
 
-
-
-  getItemBanner() {
-    this.heroBannerService.getRandomPopular().subscribe({
-      next: (result) => {
-        console.log(result)
-        this.bannerItems.set(result)
-        this.onScrollAnimationPage() // <-- Inicia el carrusel una vez que hay datos
-      }
-    })
-
+  stopCarousel() {
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
   }
 
-  nextPage() {
-    const total = this.bannerItems().length;
-    if (total === 0) return;
-
-    return this.bannerCurrentIndex.update(index => (index + 1) % total)
+  next() {
+    const animes = this.animes();
+    if (animes.length > 0) {
+      this.currentIndex.update((index) => (index + 1) % animes.length);
+    }
+  }
+  
+  prev() {
+    const animes = this.animes();
+    if (animes.length > 0) {
+      this.currentIndex.update((index) => (index - 1 + animes.length) % animes.length);
+    }
   }
 
-  beforePage() {
-    const total = this.bannerItems().length;
-    if (total === 0) return;
-
-    return this.bannerCurrentIndex.update(index => (index - 1 + total) % total)
+  setIndex(index: number) {
+    this.currentIndex.set(index);
+    this.stopCarousel();
+    this.startCarousel();
   }
-
-  onScrollAnimationPage() {
-    setInterval(() => {
-      this.nextPage();
-    }, 5000); // <-- Cambiado de 100 a 5000 (5 segundos)
-  }
-
-
 }

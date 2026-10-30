@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import 'vidstack/player';
 import 'vidstack/player/layouts/default';
@@ -51,6 +52,7 @@ export interface ServerOption {
 })
 export class VideoPlayer implements OnInit {
   private readonly http = inject(HttpClient);
+  private readonly route = inject(ActivatedRoute);
   private readonly API_URL = 'http://localhost:3000/api';
 
   // Controles de búsqueda
@@ -146,7 +148,20 @@ export class VideoPlayer implements OnInit {
   });
 
   ngOnInit(): void {
-    this.fetchServers();
+    this.route.queryParamMap.subscribe((params) => {
+      const title = params.get('title');
+      const ep = params.get('episode');
+      if (title) {
+        this.animeTitle.set(title);
+      }
+      if (ep) {
+        const epNum = parseInt(ep, 10);
+        if (!isNaN(epNum)) {
+          this.episodeNumber.set(epNum);
+        }
+      }
+      this.fetchServers();
+    });
   }
 
   updateDebridToken(token: string): void {

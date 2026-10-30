@@ -1,85 +1,173 @@
-<section class="relative h-[600px] lg:h-[700px] pt-20 w-full overflow-hidden bg-[#111312]"
-  (touchstart)="onTouchStart($event)" 
-  (touchend)="onTouchEnd($event)"
-  (mousedown)="onMouseDown($event)" 
-  (mouseup)="onMouseUp($event)">
+<section
+  class="relative min-h-[600px] w-full overflow-hidden bg-[#111312] group"
+>
+  <!-- Background with smooth transition -->
+  <div
+    class="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
+    [style.background-image]="currentAnime()?.bannerImage ? 'url(' + currentAnime()?.bannerImage + ')' : 'none'"
+    [class.opacity-0]="!currentAnime()?.bannerImage"
+  ></div>
 
-  <!-- ESTA ES LA LÍNEA QUE TE FALTÓ: Crea un loop de los animes y nos da la variable 'i' -->
-  @for (item of bannerItems(); track item.title; let i = $index) {
-  
-    <div 
-      class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
-      [class.opacity-100]="i === bannerCurrentIndex()"
-      [class.opacity-0]="i !== bannerCurrentIndex()"
-      [class.z-10]="i === bannerCurrentIndex()"
-      [class.pointer-events-none]="i !== bannerCurrentIndex()"
+  <!-- Dark overlay -->
+  <div
+    class="absolute inset-0 bg-gradient-to-r
+           from-[#111312] via-[#111312e8] to-[#11131240]"
+  ></div>
+
+  <!-- Bottom fade -->
+  <div
+    class="absolute inset-x-0 bottom-0 h-48
+           bg-gradient-to-t from-[#111312] to-transparent"
+  ></div>
+
+  <!-- Content -->
+  <div
+    class="relative z-10 flex min-h-[550px] max-w-3xl
+           flex-col justify-center px-6 pt-24 pb-12
+           sm:px-10 lg:px-14 transition-opacity duration-500"
+    [class.opacity-0]="animes().length === 0"
+  >
+
+    <!-- Top text -->
+    <p
+      class="mb-8 text-[11px] font-bold uppercase
+             tracking-widest text-[#a3d996] flex items-center gap-2"
     >
-      <!-- IMPORTANTE: Cambia "bannerItems()[bannerCurrentIndex()].bannerImage" 
-           simplemente por "item.bannerImage", ya que el loop te da el "item" directo -->
-      <img class="h-full w-full absolute inset-0 object-cover bg-center"
-           [src]="item.bannerImage" />
+      <span class="w-2 h-2 rounded-sm transition-colors duration-500" [style.background-color]="currentAnime()?.coverImage?.color || '#a3d996'"></span>
+      Destacado de Hoy
+    </p>
 
-      <!-- Dark overlay -->
-      <div class="absolute inset-0 bg-gradient-to-r from-[#111312] via-[#111312e8] to-[#11131240]"></div>
+    <!-- Metadata -->
+    <div class="mb-4 flex flex-wrap items-center gap-3">
 
-      <!-- Bottom fade -->
-      <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#111312] to-transparent"></div>
+      <span
+        class="rounded px-2 py-1
+               text-[11px] font-bold uppercase
+               tracking-wide text-[#14200f] flex items-center gap-1 transition-colors duration-500"
+        [style.background-color]="currentAnime()?.coverImage?.color || '#8ee36b'"
+      >
+        <span class="w-1.5 h-1.5 bg-[#14200f] rounded-full"></span>
+        #{{ currentIndex() + 1 }} POPULAR
+      </span>
 
-      <!-- Content -->
-      <div class="relative z-10 flex min-h-[550px] max-w-3xl flex-col justify-center px-6 pt-24 pb-12 sm:px-10 lg:px-14">
+      <span
+        class="flex items-center gap-1 rounded
+               bg-[#1c1f1e] px-2 py-1
+               text-[11px] font-medium text-white"
+        *ngIf="currentAnime()?.averageScore"
+      >
+        ★ {{ ((currentAnime()?.averageScore || 0) / 10).toFixed(1) }}
+      </span>
 
-        <!-- Metadata -->
-        <div class="mb-4 flex flex-wrap items-center gap-3">
-          <span class="rounded bg-[#8ee36b] px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-[#14200f] flex items-center gap-1">
-            <span class="w-1.5 h-1.5 bg-[#14200f] rounded-full"></span>
-            #1 TOP HOY
-          </span>
+      <span
+        class="rounded bg-[#1c1f1e] px-2 py-1
+               text-[11px] font-medium text-white"
+        *ngIf="currentAnime()?.format"
+      >
+        {{ currentAnime()?.format }}
+      </span>
 
-          <span class="rounded bg-[#14200f] px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-white flex items-center gap-1">
-            <span class="w-1.5 h-1.5 bg-white rounded-full"></span>
-            {{ item.episodeCount }} Episodios
-          </span>
-        </div>
+      <span class="flex-grow"></span>
 
-        <!-- Title -->
-        <h1 class="mt-4 max-w-2xl text-[40px] font-bold uppercase leading-[1.1] tracking-tight text-white sm:text-3xl lg:text-[44px]">
-          {{ item.title || item.title }}
-        </h1>
+      <span class="text-[11px] font-medium text-white flex items-center gap-1">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+        HD
+      </span>
 
-        <h1 class="mt-2 max-w-2xl text-md leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[18px]">
-          {{ item.description?.slice(0,300) }}...
-        </h1>
-
-        <!-- Actions -->
-        <div class="mt-12 flex flex-wrap items-center gap-3">
-          <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-[#8ee36b] px-8 py-3.5 text-[13px] font-bold text-[#13200f] transition hover:bg-[#a0ed82]">
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M6.3 4.5a1 1 0 0 1 1.5-.86l7.5 5a1 1 0 0 1 0 1.72l-7.5 5A1 1 0 0 1 6.3 14.5v-10Z" />
-            </svg>
-            Ver ahora
-          </button>
-
-          <button type="button" class="inline-flex items-center gap-2 rounded-lg bg-[#1c1f1e] border border-white/5 px-6 py-3.5 text-[13px] font-bold text-white transition hover:bg-[#252a29]">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 5.5A2.5 2.5 0 0 1 7.5 3h9A2.5 2.5 0 0 1 19 5.5V21l-7-4-7 4V5.5Z" />
-            </svg>
-            Mi lista
-          </button>
-        </div>
-
-        <!-- Genres -->
-        <div class="mt-12 flex flex-wrap gap-3">
-          @for (genre of item.genres; track genre) {
-            <span class="rounded-full bg-[#1c1f1e] px-4 py-1.5 text-[12px] font-medium text-[#d0d0d0] border border-white/5">
-              {{ genre }}
-            </span>
-          }
-        </div>
-
-      </div>
     </div>
-  
-  <!-- CIERRE DEL LOOP -->
-  }
-  
+
+    <!-- Title -->
+    <h1
+      [routerLink]="currentAnime()?.id ? ['/anime', currentAnime()?.id] : null"
+      class="max-w-2xl text-[40px] font-bold uppercase
+             leading-[1.1] tracking-tight
+             text-white line-clamp-3
+             sm:text-5xl lg:text-[44px] cursor-pointer hover:text-emerald-400 transition-colors"
+    >
+      {{ currentAnime()?.title?.english || currentAnime()?.title?.romaji || currentAnime()?.title?.userPreferred || (animes().length > 0 ? 'Título no disponible' : 'Cargando...') }}
+    </h1>
+
+    <p *ngIf="currentAnime()?.description" class="mt-4 text-[#a0a5a3] text-sm line-clamp-2 max-w-xl" [innerHTML]="currentAnime()?.description"></p>
+
+    <!-- Genres -->
+    <div class="mt-5 flex flex-wrap gap-3">
+      @for (genre of currentAnime()?.genres?.slice(0, 4); track genre) {
+        <span
+          class="rounded-full bg-[#1c1f1e] px-4 py-1.5
+                 text-[12px] font-medium text-[#d0d0d0] border border-white/5"
+        >
+          {{ genre }}
+        </span>
+      }
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+
+      <!-- Watch -->
+      <a
+        [routerLink]="currentAnime()?.id ? ['/watch'] : null"
+        class="inline-flex items-center gap-2
+               rounded-lg px-8 py-3.5
+               text-[13px] font-bold text-[#13200f]
+               transition hover:brightness-110 cursor-pointer shadow-lg"
+        [style.background-color]="currentAnime()?.coverImage?.color || '#8ee36b'"
+      >
+        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M6.3 4.5a1 1 0 0 1 1.5-.86l7.5 5a1 1 0 0 1 0 1.72l-7.5 5A1 1 0 0 1 6.3 14.5v-10Z" />
+        </svg>
+        Ver ahora
+      </a>
+
+      <!-- Add -->
+      <button
+        type="button"
+        class="inline-flex items-center gap-2
+               rounded-lg bg-[#1c1f1e] border border-white/5
+               px-6 py-3.5
+               text-[13px] font-bold text-white
+               transition hover:bg-[#252a29]"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 5.5A2.5 2.5 0 0 1 7.5 3h9A2.5 2.5 0 0 1 19 5.5V21l-7-4-7 4V5.5Z" />
+        </svg>
+        Mi lista
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Carousel Controls (Arrows) -->
+  <button (click)="prev()" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60 backdrop-blur-sm" *ngIf="animes().length > 1">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+  </button>
+  <button (click)="next()" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60 backdrop-blur-sm" *ngIf="animes().length > 1">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+  </button>
+
+  <!-- Carousel Indicators (Dots) -->
+  <div class="absolute right-14 bottom-24 z-20 flex gap-2" *ngIf="animes().length > 1">
+    <button *ngFor="let anime of animes(); let i = index"
+            (click)="setIndex(i)"
+            class="w-8 h-1 rounded-full transition-all duration-300 cursor-pointer"
+            [style.background-color]="i === currentIndex() ? (anime.coverImage?.color || '#ffffff') : 'rgba(255,255,255,0.3)'">
+    </button>
+  </div>
+
+  <!-- Filters at the bottom inside the banner container -->
+  <div class="relative z-10 px-6 sm:px-10 lg:px-14 pb-8 flex gap-3 overflow-x-auto scrollbar-hide">
+    <button class="px-5 py-2 rounded-full bg-[#8ee36b] text-[#13200f] text-sm font-bold whitespace-nowrap">
+      Todos
+    </button>
+    <button class="px-5 py-2 rounded-full bg-[#1c1f1e] text-[#a0a5a3] text-sm font-medium whitespace-nowrap border border-white/5 hover:text-white transition">
+      Simulcasts
+    </button>
+    <button class="px-5 py-2 rounded-full bg-[#1c1f1e] text-[#a0a5a3] text-sm font-medium whitespace-nowrap border border-white/5 hover:text-white transition">
+      Doblaje Español
+    </button>
+    <button class="px-5 py-2 rounded-full bg-[#1c1f1e] text-[#a0a5a3] text-sm font-medium whitespace-nowrap border border-white/5 hover:text-white transition">
+      Películas
+    </button>
+  </div>
 </section>

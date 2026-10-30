@@ -11,3 +11,4 @@ export class SectionTitle {
    subtitle = input("")
    showViewAll = input(false)
 }
+

@@ -1,4 +1,6 @@
 <div
+  [routerLink]="['/watch']"
+  [queryParams]="{ title: episode().title, episode: getEpisodeNumber() }"
   class="rounded-2xl bg-[#16171b] border border-[#23252d] p-2.5 sm:p-3 flex flex-col gap-2 transition-all duration-300 hover:border-emerald-500/40 hover:bg-[#1a1c22] hover:-translate-y-1 hover:shadow-xl hover:shadow-black/70 group cursor-pointer"
 >
   <!-- Contenedor de la Imagen / Thumbnail -->

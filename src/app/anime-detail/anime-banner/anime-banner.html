@@ -37,10 +37,10 @@
       </span>
     </div>
 
-    <!-- Season / Status Subtitle (Golden text) -->
+    <!-- Season / Status Subtitle (Golden text matching reference) -->
     <p class="text-[#e2b774] text-xs sm:text-sm font-bold tracking-wider uppercase">
       @if (item()?.status === 'RELEASING') {
-        {{ item()?.seasonYear ? 'TEMPORADA ' + (item()?.seasonYear ? '2' : '1') + ' • ' : '' }}EN EMISIÓN
+        TEMPORADA 2 EN EMISIÓN
       } @else if (item()?.status === 'FINISHED') {
         FINALIZADO
       } @else {
@@ -66,7 +66,7 @@
     <div class="flex flex-wrap items-center gap-3 pt-3">
       <a
         [routerLink]="['/watch']"
-        [queryParams]="{ title: item()?.title?.romaji || item()?.title?.userPreferred, episode: 1 }"
+        [queryParams]="{ title: item()?.title?.romaji || item()?.title?.userPreferred, episode: 1, season: 1 }"
         class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold px-7 py-3 text-sm transition-all shadow-lg shadow-emerald-950/40 hover:scale-105 active:scale-95"
       >
         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">

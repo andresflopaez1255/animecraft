@@ -1,4 +1,7 @@
-<div class="bg-[#151817] w-[280px] sm:w-[320px] rounded-xl flex flex-col shrink-0 overflow-hidden cursor-pointer group transition-transform hover:scale-[1.02]">
+<div
+    [routerLink]="['/watch']"
+    [queryParams]="{ title: watchlistItem.title, episode: watchlistItem.episode }"
+    class="bg-[#151817] w-[280px] sm:w-[320px] rounded-xl flex flex-col shrink-0 overflow-hidden cursor-pointer group transition-transform hover:scale-[1.02]">
     
     <!-- Image Container -->
     <div class="relative w-full aspect-video">
